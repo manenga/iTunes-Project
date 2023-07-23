@@ -29,6 +29,17 @@ class RowTableViewCell: UITableViewCell {
         return stackView
     }()
 
+    private var stackViewFooter: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing  = 10
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.isBaselineRelativeArrangement = true
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     private var imageViewArtwork: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -54,8 +65,7 @@ class RowTableViewCell: UITableViewCell {
     private var labelReleaseDate: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 10)
-        label.layoutMargins.bottom = 15
+        label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
 
@@ -65,6 +75,16 @@ class RowTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
+
+    private var seeMoreButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        return button
+    }()
+
+    private var isSeeLess = true
+    private var seeMoreDidTapHandler: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -82,11 +102,22 @@ class RowTableViewCell: UITableViewCell {
             by: UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
     }
 
+    @objc private func seeMoreButtonTapped() {
+        self.isSeeLess.toggle()
+        self.labelShortDescription.numberOfLines = self.isSeeLess ? 2 : 6
+        self.labelShortDescription.layoutIfNeeded()
+        self.seeMoreButton.setTitle(self.isSeeLess ? "See less" : "See more", for: .normal)
+        layoutIfNeeded()
+    }
+
     private func addViews() {
         stackViewContent.addArrangedSubview(labelSongTitle)
         stackViewContent.addArrangedSubview(labelArtistName)
-        stackViewContent.addArrangedSubview(labelReleaseDate)
         stackViewContent.addArrangedSubview(labelShortDescription)
+        stackViewContent.addArrangedSubview(stackViewFooter)
+
+        stackViewFooter.addArrangedSubview(labelReleaseDate)
+        stackViewFooter.addArrangedSubview(seeMoreButton)
 
         stackViewContainer.addArrangedSubview(imageViewArtwork)
         stackViewContainer.addArrangedSubview(stackViewContent)
@@ -96,11 +127,12 @@ class RowTableViewCell: UITableViewCell {
     func setupCell(with data: SearchResult) {
         labelSongTitle.text = data.trackName
         labelArtistName.text = data.artistName
-        labelReleaseDate.text = data.releaseDate
+        labelReleaseDate.text = data.releaseDate?.changeDateFormat()
         labelShortDescription.text = data.shortDescription
         imageViewArtwork.downloaded(from: data.artworkUrl100 ?? "")
-
-        layoutIfNeeded()
+        seeMoreButton.isHidden = data.shortDescription?.isEmpty ?? true
+        seeMoreButton.setTitle(isSeeLess ? "See less" : "See more", for: .normal)
+        seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped), for: .touchUpInside)
     }
 
     private func constrainViews() {

@@ -12,13 +12,10 @@ import Foundation
 class HomeViewModel: ObservableObject {
 
     @Published var results: [SearchResult] = []
-    @Published var isLoading: Bool = true
-
+    
     private var cancellableToken: AnyCancellable?
 
-    init() {
-
-    }
+    init() { }
 
     func searchTerm(_ term: String) {
         let formattedTerm = term.replacingOccurrences(of: " ", with: "+")
