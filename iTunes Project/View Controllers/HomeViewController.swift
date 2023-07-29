@@ -5,9 +5,8 @@
 //  Created by Manenga Mungandi on 2023/07/23.
 //
 
-// TODO: Empty state view
-// TODO: Previous searches
 // TODO: Pagination
+
 import UIKit
 import Combine
 import SwiftUI
@@ -35,7 +34,6 @@ class HomeViewController: UIViewController {
         return searchBar
     }()
 
-
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .singleLine
@@ -44,11 +42,17 @@ class HomeViewController: UIViewController {
         return tableView
     }()
 
+
+    private var noResultsView: NoResultsView = {
+        let emptyResultsView = NoResultsView()
+        emptyResultsView.setEmptyMessage("Wow! Such empty.")
+        emptyResultsView.translatesAutoresizingMaskIntoConstraints = false
+        return emptyResultsView
+    }()
+
     private var userInterfaceStyle: UIUserInterfaceStyle {
         UserDefaults.standard.string(forKey: "theme") == "light" ? .light : .dark
     }
-
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +63,7 @@ class HomeViewController: UIViewController {
 
     private func addViews() {
         view.addSubview(stackView)
+        view.addSubview(noResultsView)
         stackView.addArrangedSubview(searchBar)
         stackView.addArrangedSubview(tableView)
     }
@@ -86,7 +91,12 @@ class HomeViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 80),
-            tableView.heightAnchor.constraint(equalToConstant: 500)
+            tableView.heightAnchor.constraint(equalToConstant: 500),
+            noResultsView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            noResultsView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
+            noResultsView.leadingAnchor.constraint(greaterThanOrEqualTo: tableView.leadingAnchor, constant: 16),
+            noResultsView.trailingAnchor.constraint(lessThanOrEqualTo: tableView.trailingAnchor, constant: -16),
+
         ])
     }
 
@@ -147,6 +157,7 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        noResultsView.isHidden = viewModel.results.startIndex != viewModel.results.endIndex
         return viewModel.results.count
     }
 
