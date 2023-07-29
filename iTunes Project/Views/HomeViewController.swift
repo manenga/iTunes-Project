@@ -27,7 +27,7 @@ class HomeViewController: UIViewController {
         searchBar.prompt = "Search For Songs, Artists and Albums"
         searchBar.autocapitalizationType = .words
         searchBar.autocorrectionType = .no
-        searchBar.placeholder = "e.g Aqua Barbie Girl"
+        searchBar.placeholder = "What do you want to listen to?"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()

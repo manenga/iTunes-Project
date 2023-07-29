@@ -14,10 +14,12 @@ class RowTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.spacing  = 10
         stackView.axis = .horizontal
-        stackView.alignment = .fill
+        stackView.alignment = .top
         stackView.distribution = .fillProportionally
         stackView.isBaselineRelativeArrangement = true
+        stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return stackView
     }()
 
@@ -126,7 +128,7 @@ class RowTableViewCell: UITableViewCell {
 
     func setupCell(with data: SearchResult) {
         labelSongTitle.text = data.trackName
-        labelArtistName.text = data.artistName
+        labelArtistName.text = (data.kind?.capitalized ?? "") + " • " + (data.artistName ?? "")
         labelReleaseDate.text = data.releaseDate?.changeDateFormat()
         labelShortDescription.text = data.shortDescription
         imageViewArtwork.downloaded(from: data.artworkUrl100 ?? "")
