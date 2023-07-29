@@ -25,8 +25,7 @@ class HomeViewModel: ObservableObject {
 
         let formattedTerm = term.replacingOccurrences(of: " ", with: "+")
         cancellableToken = getSearchResults(searchTerm: formattedTerm)
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: { [weak self] results in
+            .sink(receiveValue: { [weak self] results in
                 self?.results = results.filter { $0.trackName != nil }
             })
     }

@@ -8,36 +8,39 @@
 import UIKit
 
 class NoResultsView: UIView {
-    // MARK: - Properties
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .darkGray
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    // MARK: - Initialization
-
     override init(frame: CGRect) {
         super.init(frame: frame)
+        addViews()
         setupViews()
+        constrainViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        addViews()
         setupViews()
+        constrainViews()
     }
 
-    // MARK: - Setup
+    private func addViews() {
+        addSubview(titleLabel)
+    }
 
     private func setupViews() {
         backgroundColor = .clear
-        addSubview(titleLabel)
+    }
 
-        // Constraints for titleLabel
+    private func constrainViews() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -45,8 +48,6 @@ class NoResultsView: UIView {
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -16),
         ])
     }
-
-    // MARK: - Public methods
 
     func setEmptyMessage(_ message: String) {
         titleLabel.text = message

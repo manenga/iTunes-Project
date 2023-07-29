@@ -5,8 +5,6 @@
 //  Created by Manenga Mungandi on 2023/07/23.
 //
 
-// TODO: Pagination
-
 import UIKit
 import Combine
 import SwiftUI
