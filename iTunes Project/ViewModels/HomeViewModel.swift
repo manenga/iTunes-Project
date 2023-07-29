@@ -11,14 +11,14 @@ import Foundation
 
 class HomeViewModel: ObservableObject {
 
-    @Published var results: [SearchResult] = []
+    @Published var results: [SearchItem] = []
 
     private var cancellableToken: AnyCancellable?
 
     init() { }
 
     func searchTerm(_ term: String) {
-        guard !term.isEmpty else {
+        guard term.isNotEmpty else {
             results = []
             return
         }
@@ -33,7 +33,7 @@ class HomeViewModel: ObservableObject {
 
 extension HomeViewModel {
 
-    private func getSearchResults(searchTerm: String) -> AnyPublisher<[SearchResult], Never> {
+    private func getSearchResults(searchTerm: String) -> AnyPublisher<[SearchItem], Never> {
         APIManager.request(term: searchTerm)
             .map(\.results)
             .replaceError(with: [])

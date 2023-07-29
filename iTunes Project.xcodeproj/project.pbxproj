@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FF04419E2A75A72500DAF5E9 /* NoResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04419D2A75A72500DAF5E9 /* NoResultsView.swift */; };
+		FF0441A02A75AE6A00DAF5E9 /* SearchItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF04419F2A75AE6A00DAF5E9 /* SearchItem.swift */; };
 		FF25D8042A6D8D44002727ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8032A6D8D44002727ED /* AppDelegate.swift */; };
 		FF25D8062A6D8D44002727ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8052A6D8D44002727ED /* SceneDelegate.swift */; };
 		FF25D8082A6D8D44002727ED /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8072A6D8D44002727ED /* HomeViewController.swift */; };
@@ -17,7 +18,7 @@
 		FF25D8252A6D8D46002727ED /* iTunes_ProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8242A6D8D46002727ED /* iTunes_ProjectUITests.swift */; };
 		FF25D8272A6D8D46002727ED /* iTunes_ProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8262A6D8D46002727ED /* iTunes_ProjectUITestsLaunchTests.swift */; };
 		FF25D8372A6D94BE002727ED /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8362A6D94BE002727ED /* HomeViewModel.swift */; };
-		FF25D83B2A6D955E002727ED /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D83A2A6D955E002727ED /* Response.swift */; };
+		FF25D83B2A6D955E002727ED /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D83A2A6D955E002727ED /* SearchResult.swift */; };
 		FF25D83D2A6D9581002727ED /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D83C2A6D9581002727ED /* APIManager.swift */; };
 		FF25D83F2A6D95A3002727ED /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D83E2A6D95A3002727ED /* APIClient.swift */; };
 		FF25D8412A6D980C002727ED /* RowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25D8402A6D980C002727ED /* RowTableViewCell.swift */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		FF04419D2A75A72500DAF5E9 /* NoResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResultsView.swift; sourceTree = "<group>"; };
+		FF04419F2A75AE6A00DAF5E9 /* SearchItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchItem.swift; sourceTree = "<group>"; };
 		FF25D8002A6D8D44002727ED /* iTunes Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTunes Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF25D8032A6D8D44002727ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FF25D8052A6D8D44002727ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,7 +61,7 @@
 		FF25D8242A6D8D46002727ED /* iTunes_ProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTunes_ProjectUITests.swift; sourceTree = "<group>"; };
 		FF25D8262A6D8D46002727ED /* iTunes_ProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iTunes_ProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FF25D8362A6D94BE002727ED /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		FF25D83A2A6D955E002727ED /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		FF25D83A2A6D955E002727ED /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		FF25D83C2A6D9581002727ED /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		FF25D83E2A6D95A3002727ED /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		FF25D8402A6D980C002727ED /* RowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowTableViewCell.swift; sourceTree = "<group>"; };
@@ -196,7 +198,8 @@
 		FF25D8382A6D953D002727ED /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FF25D83A2A6D955E002727ED /* Response.swift */,
+				FF04419F2A75AE6A00DAF5E9 /* SearchItem.swift */,
+				FF25D83A2A6D955E002727ED /* SearchResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -346,12 +349,13 @@
 				FFF729632A6F025F00BDA4CC /* StringExt.swift in Sources */,
 				FF25D8432A6DA075002727ED /* UIImageViewExt.swift in Sources */,
 				FF25D83F2A6D95A3002727ED /* APIClient.swift in Sources */,
-				FF25D83B2A6D955E002727ED /* Response.swift in Sources */,
+				FF25D83B2A6D955E002727ED /* SearchResult.swift in Sources */,
 				FF25D83D2A6D9581002727ED /* APIManager.swift in Sources */,
 				FF25D8412A6D980C002727ED /* RowTableViewCell.swift in Sources */,
 				FFF729652A72E9C000BDA4CC /* ArrayExt.swift in Sources */,
 				FF25D8042A6D8D44002727ED /* AppDelegate.swift in Sources */,
 				FF25D8062A6D8D44002727ED /* SceneDelegate.swift in Sources */,
+				FF0441A02A75AE6A00DAF5E9 /* SearchItem.swift in Sources */,
 				FF25D8372A6D94BE002727ED /* HomeViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

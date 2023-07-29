@@ -8,6 +8,11 @@
 import Foundation
 
 extension String {
+
+    var isNotEmpty: Bool {
+        !isEmpty
+    }
+
     func changeDateFormat(fromFormat: String = "yyyy-MM-dd'T'HH:mm:ssZ", toFormat: String = "dd MMM yyyy") -> String {
         let inputDateFormatter = DateFormatter()
         inputDateFormatter.dateFormat = fromFormat

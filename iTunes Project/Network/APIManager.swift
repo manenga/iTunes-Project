@@ -20,7 +20,7 @@ enum APIManager {
 }
 
 extension APIManager {
-    static func request(term: String) -> AnyPublisher<Response, Error> {
+    static func request(term: String) -> AnyPublisher<SearchResult, Error> {
         return makeRequest(searchTerm: term)
     }
 

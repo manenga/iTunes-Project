@@ -23,6 +23,6 @@ extension UIColor {
                   alpha: alpha)
     }
     class var primary: UIColor {
-        return UIColor(named: "Primary")!
+        return UIColor(named: "AccentColor")!
     }
 }

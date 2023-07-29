@@ -50,7 +50,7 @@ final class iTunes_ProjectTests: XCTestCase {
     }
 
     func testSearchForSpecificSong() {
-        let expectation = XCTestExpectation(description: "Publishes 4 videos")
+        let expectation = XCTestExpectation(description: "We search for a specific song and get the correct results")
 
         viewModel.$results
             .dropFirst()
@@ -89,5 +89,4 @@ final class iTunes_ProjectTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

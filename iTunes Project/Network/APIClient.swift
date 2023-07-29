@@ -23,7 +23,7 @@ struct APIClient {
                     let payload = try JSONDecoder().decode(T.self, from: result.data)
                     return Response(value: payload, response: result.response)
                 } catch {
-                    print(error)
+                    debugPrint(error)
                     throw URLError(.badServerResponse)
                 }
             }

@@ -126,11 +126,12 @@ class RowTableViewCell: UITableViewCell {
         contentView.addSubview(stackViewContainer)
     }
 
-    func setupCell(with data: SearchResult) {
+    func setupCell(with data: SearchItem) {
         labelSongTitle.text = data.trackName
-        labelReleaseDate.text = data.releaseDate?.changeDateFormat()
         labelShortDescription.text = data.shortDescription
         imageViewArtwork.downloaded(from: data.artworkUrl100 ?? "")
+        labelReleaseDate.text = data.releaseDate?.changeDateFormat()
+        labelShortDescription.isHidden = (data.shortDescription ?? "").isEmpty
         labelArtistName.text = (data.kind?.capitalized ?? "") + " • " + (data.artistName ?? "")
 
         labelSongTitle.textColor = userInterfaceStyle == .light ? .black : .white
@@ -141,7 +142,7 @@ class RowTableViewCell: UITableViewCell {
         seeMoreButton.isHidden = data.shortDescription?.isEmpty ?? true
         seeMoreButton.setTitle(isSeeLess ? "See less" : "See more", for: .normal)
         seeMoreButton.setTitleColor(userInterfaceStyle == .light ? .black : .white, for: .normal)
-    seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped), for: .touchUpInside)
+        seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped), for: .touchUpInside)
     }
 
     private func constrainViews() {

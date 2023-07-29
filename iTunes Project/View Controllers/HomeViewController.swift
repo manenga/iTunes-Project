@@ -15,18 +15,19 @@ class HomeViewController: UIViewController {
 
     private var stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing  = 10
         stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
     private var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.prompt = "Search For Songs, Artists and Albums"
-        searchBar.autocapitalizationType = .words
+        searchBar.returnKeyType = .search
         searchBar.autocorrectionType = .no
+        searchBar.autocapitalizationType = .words
+        searchBar.prompt = "Search For Songs, Artists and Albums"
         searchBar.placeholder = "What do you want to listen to?"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
@@ -34,18 +35,26 @@ class HomeViewController: UIViewController {
 
     private var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.separatorColor = .primary
         tableView.separatorStyle = .singleLine
+        tableView.keyboardDismissMode = .onDrag
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(RowTableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-
 
     private var noResultsView: NoResultsView = {
         let emptyResultsView = NoResultsView()
         emptyResultsView.setEmptyMessage("Wow! Such empty.")
         emptyResultsView.translatesAutoresizingMaskIntoConstraints = false
         return emptyResultsView
+    }()
+
+    private var loadingView: LoadingView = {
+        let loadingView = LoadingView()
+        loadingView.isHidden = true
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        return loadingView
     }()
 
     private var userInterfaceStyle: UIUserInterfaceStyle {
@@ -62,6 +71,7 @@ class HomeViewController: UIViewController {
     private func addViews() {
         view.addSubview(stackView)
         view.addSubview(noResultsView)
+        view.addSubview(loadingView)
         stackView.addArrangedSubview(searchBar)
         stackView.addArrangedSubview(tableView)
     }
@@ -80,6 +90,8 @@ class HomeViewController: UIViewController {
         let modeToggle = UIBarButtonItem(image: UIImage(systemName: "sun.dust.circle.fill"), style: .plain, target: self, action: #selector(appearanceSwitch))
         let aboutAppIcon = UIBarButtonItem(image: UIImage(systemName: "questionmark.circle.fill"), style: .plain, target: self, action: #selector(showAboutAppScreen))
         navigationItem.rightBarButtonItems = [aboutAppIcon, modeToggle]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.primary]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
 
     private func constrainViews() {
@@ -90,11 +102,14 @@ class HomeViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 80),
             tableView.heightAnchor.constraint(equalToConstant: 500),
+            loadingView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
             noResultsView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
             noResultsView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor),
             noResultsView.leadingAnchor.constraint(greaterThanOrEqualTo: tableView.leadingAnchor, constant: 16),
-            noResultsView.trailingAnchor.constraint(lessThanOrEqualTo: tableView.trailingAnchor, constant: -16),
-
+            noResultsView.trailingAnchor.constraint(lessThanOrEqualTo: tableView.trailingAnchor, constant: -16)
         ])
     }
 
@@ -125,16 +140,28 @@ class HomeViewController: UIViewController {
     }
 
     @objc private func showAboutAppScreen() {
-        let alert = UIAlertController(title: "About this app", message: "This is a simple app that makes use of the iTunes API to search for any song on the entire iTunes catalog.", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(
+            title: "About this app",
+            message: "This is a simple app that makes use of the iTunes API to search for any song on the entire iTunes catalog.",
+            preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }
 
 extension HomeViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.searchTerm(searchText)
-        tableView.reloadData()
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        loadingView.startAnimating()
+        loadingView.isHidden = false
+        noResultsView.isHidden = true
+
+        viewModel.searchTerm(searchBar.text ?? "")
+        searchBar.resignFirstResponder()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.tableView.reloadData()
+            self?.loadingView.stopAnimating()
+            self?.loadingView.isHidden = true
+        }
     }
 }
 
@@ -163,8 +190,52 @@ extension HomeViewController: UITableViewDelegate {
         if !viewModel.results.isEmpty && viewModel.results.count > indexPath.row {
             let data = viewModel.results[indexPath.row]
             return (data.shortDescription ?? "").count > 100 ? 300 : 150
-
         }
         return 150
+    }
+}
+
+class LoadingView: UIView {
+    // MARK: - Properties
+
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicatorView
+    }()
+
+    // MARK: - Initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupViews()
+    }
+
+    // MARK: - Setup
+
+    private func setupViews() {
+        backgroundColor = .white
+        addSubview(activityIndicatorView)
+
+        // Constraints for activityIndicatorView to be centered within the parent view
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+
+    // MARK: - Public methods
+
+    func startAnimating() {
+        activityIndicatorView.startAnimating()
+    }
+
+    func stopAnimating() {
+        activityIndicatorView.stopAnimating()
     }
 }
