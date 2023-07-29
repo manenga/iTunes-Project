@@ -19,8 +19,13 @@ struct APIClient {
         return URLSession.shared
             .dataTaskPublisher(for: request)
             .tryMap { result -> Response<T> in
-                let payload = try JSONDecoder().decode(T.self, from: result.data)
-                return Response(value: payload, response: result.response)
+                do {
+                    let payload = try JSONDecoder().decode(T.self, from: result.data)
+                    return Response(value: payload, response: result.response)
+                } catch {
+                    print(error)
+                    throw URLError(.badServerResponse)
+                }
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
