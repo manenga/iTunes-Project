@@ -6,7 +6,7 @@ A simple mobile app that will search for music in iTunes using Apple's APIs.
 # Demo
 | Dark Mode  | Light Mode |
 | ------------- | ------------- |
-| Content Cell  | Content Cell  |
+| ![Simulator Screenshot - iPhone 14 - 2023-07-29 at 23.56.33.png](https://github.com/manenga/iTunes-Project/blob/main/Simulator%20Screenshot%20-%20iPhone%2014%20-%202023-07-29%20at%2023.56.33.png?raw=true)  | ![Simulator Screenshot - iPhone 14 - 2023-07-29 at 23.56.29.png](https://github.com/manenga/iTunes-Project/blob/main/Simulator%20Screenshot%20-%20iPhone%2014%20-%202023-07-29%20at%2023.56.29.png?raw=true)  |
 
 ## How can I support the developer?
 - Star our GitHub repo ⭐
