@@ -10,6 +10,10 @@ import Foundation
 
 class RowTableViewCell: UITableViewCell {
 
+    private var userInterfaceStyle: UIUserInterfaceStyle {
+        UserDefaults.standard.string(forKey: "theme") == "dark" ? .dark : .light
+    }
+
     private var stackViewContainer: UIStackView = {
         let stackView = UIStackView()
         stackView.spacing  = 10
@@ -52,7 +56,6 @@ class RowTableViewCell: UITableViewCell {
     private var labelSongTitle: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
@@ -66,21 +69,18 @@ class RowTableViewCell: UITableViewCell {
 
     private var labelReleaseDate: UILabel = {
         let label = UILabel()
-        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
 
     private var labelShortDescription: UILabel = {
         let label = UILabel()
-        label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
 
     private var seeMoreButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         return button
     }()
@@ -128,13 +128,20 @@ class RowTableViewCell: UITableViewCell {
 
     func setupCell(with data: SearchResult) {
         labelSongTitle.text = data.trackName
-        labelArtistName.text = (data.kind?.capitalized ?? "") + " • " + (data.artistName ?? "")
         labelReleaseDate.text = data.releaseDate?.changeDateFormat()
         labelShortDescription.text = data.shortDescription
         imageViewArtwork.downloaded(from: data.artworkUrl100 ?? "")
+        labelArtistName.text = (data.kind?.capitalized ?? "") + " • " + (data.artistName ?? "")
+
+        labelSongTitle.textColor = userInterfaceStyle == .light ? .black : .white
+        labelArtistName.textColor = userInterfaceStyle == .light ? .black : .white
+        labelReleaseDate.textColor = userInterfaceStyle == .light ? .black : .white
+        labelShortDescription.textColor = userInterfaceStyle == .light ? .gray : .lightGray
+
         seeMoreButton.isHidden = data.shortDescription?.isEmpty ?? true
         seeMoreButton.setTitle(isSeeLess ? "See less" : "See more", for: .normal)
-        seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped), for: .touchUpInside)
+        seeMoreButton.setTitleColor(userInterfaceStyle == .light ? .black : .white, for: .normal)
+    seeMoreButton.addTarget(self, action: #selector(seeMoreButtonTapped), for: .touchUpInside)
     }
 
     private func constrainViews() {

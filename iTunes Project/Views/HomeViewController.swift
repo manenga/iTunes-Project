@@ -5,6 +5,9 @@
 //  Created by Manenga Mungandi on 2023/07/23.
 //
 
+// TODO: Empty state view
+// TODO: Previous searches
+// TODO: Pagination
 import UIKit
 import Combine
 import SwiftUI
@@ -41,6 +44,12 @@ class HomeViewController: UIViewController {
         return tableView
     }()
 
+    private var userInterfaceStyle: UIUserInterfaceStyle {
+        UserDefaults.standard.string(forKey: "theme") == "light" ? .light : .dark
+    }
+
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -55,16 +64,19 @@ class HomeViewController: UIViewController {
     }
 
     private func setupViews() {
-        view.backgroundColor = .white
-        overrideUserInterfaceStyle = .light
-        navigationItem.title = "iTunes Library"
-        navigationItem.titleView?.tintColor = .black
-        navigationController?.navigationBar.prefersLargeTitles = true
-
+        setupNavigation()
+        setupUserInterfaceStyle()
         searchBar.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         tableView.reloadData()
+    }
+
+    private func setupNavigation() {
+        navigationItem.title = "iTunes Library"
+        let modeToggle = UIBarButtonItem(image: UIImage(systemName: "sun.dust.circle.fill"), style: .plain, target: self, action: #selector(appearanceSwitch))
+        let aboutAppIcon = UIBarButtonItem(image: UIImage(systemName: "questionmark.circle.fill"), style: .plain, target: self, action: #selector(showAboutAppScreen))
+        navigationItem.rightBarButtonItems = [aboutAppIcon, modeToggle]
     }
 
     private func constrainViews() {
@@ -77,11 +89,42 @@ class HomeViewController: UIViewController {
             tableView.heightAnchor.constraint(equalToConstant: 500)
         ])
     }
+
+    private func setupUserInterfaceStyle() {
+        if userInterfaceStyle == .light {
+            view.backgroundColor = .white
+            overrideUserInterfaceStyle = .light
+
+        } else {
+            view.backgroundColor = .black
+            overrideUserInterfaceStyle = .dark
+        }
+    }
+
+    @objc private func appearanceSwitch() {
+        if userInterfaceStyle == .dark {
+            UserDefaults.standard.set("light", forKey: "theme")
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            appDelegate.window?.overrideUserInterfaceStyle = .light
+        } else {
+            UserDefaults.standard.set("dark", forKey: "theme")
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            appDelegate.window?.overrideUserInterfaceStyle = .dark
+        }
+        UserDefaults.standard.synchronize()
+        setupUserInterfaceStyle()
+        tableView.reloadData()
+    }
+
+    @objc private func showAboutAppScreen() {
+        let alert = UIAlertController(title: "About this app", message: "This is a simple app that makes use of the iTunes API to search for any song on the entire iTunes catalog.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        debugPrint(searchText)
         viewModel.searchTerm(searchText)
         tableView.reloadData()
     }
