@@ -22,7 +22,7 @@ A simple mobile app that will search for music in iTunes using Apple's APIs.
 - [Game of Thrones Character Library](https://github.com/manenga/GameOfThrones) - Mobile App to display the content of the API of Fire and Ice.
 
 ## License
-[Apache](https://github.com/manenga/iTunes-Project/blob/main/LICENSE) license.
+[Apache](https://github.com/manenga/iTunes-Project/blob/main/LICENSE.txt) license.
 
 ## From Developers
 Made with ♥ by [Manenga](https://linkedin.com/in/mungandi/). [Support me](https://paypal.me/Mungandi).
