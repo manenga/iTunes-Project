@@ -18,7 +18,7 @@ A simple mobile app that will search for music in iTunes using Apple's APIs.
 ## More from the developers
 - [Rona Mobile App](https://github.com/manenga/Rona/) - Covid19 Global Pandemic Statistics Tracker
 - [Luno API Playground](https://github.com/manenga/LunoAPI) - A Swift playground on the Public Luno API.
-- [Wordbook]([https://github.com/manenga/Valr-API](https://github.com/manenga/Wordbook)) - A Swift Transactional Key-Value Store
+- [Wordbook](https://github.com/manenga/Wordbook) - A Swift Transactional Key-Value Store
 - [Game of Thrones Character Library](https://github.com/manenga/GameOfThrones) - Mobile App to display the content of the API of Fire and Ice.
 
 ## License
